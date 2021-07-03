@@ -7,7 +7,7 @@ Hi everyone,
 **Make sure to read everything before starting.**   
 
 This macro will only run if **FFRK** run in simplified mode, make sure to activate that in game settings.  
-This macro doesn't select team, it will also select your 1st one, make sure that this team can handle all fights.   
+This macro doesn't select team, it will only use your 1st one, make sure that this team can handle all fights.   
 This macro use image to work, if you have any permanent special settings activated (like forced AA) in your graphic card, this macro may not work, make sure to desactivate them if you do.  
 
 as a reminder, **FFRK AndApp** version only exist for the **Japanese version** of the game.  
@@ -32,7 +32,7 @@ It's very unlikely that i ever update it but feel free to branch and update it i
 - Emit sound when inside a chest room.  
 - Emit sound after beating a Laby.  
 - If selected, Automatically restart the same Laby.  
-- If selected, Automatically select 1 or more Chest.  
+- If selected, Automatically select 1 or more Chests.  
 - Delay the start of the farm.  
 
 ##
