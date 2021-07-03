@@ -21,7 +21,7 @@ as a reminder, **FFRK AndApp** version only exist for the **Japanese version** o
 This version is a reworked and massively stripped version of my other (old) macro [FFRK macro Keeper](https://github.com/LosBaguettor/ffrkmacrokeeper).  
 It only works with Labyrinth.  
 **It has no failover nor error handler** (except for the infamous network error 101).  
-Contrary to the original one, this own **doesn't do any stamina check** which means it can hang.  
+Contrary to the original one, this one **doesn't do any stamina check** which means it can hang.  
 It's very unlikely that i ever update it but feel free to branch and update it if you want.  
 
 ##

@@ -82,11 +82,11 @@ FFRK_farming_process:
 		p9 := FFRK_ConfirmImage("p9",imagevar,2)
 		;msgbox 	%FFRKblue% %FFRKpurple% %p0% %p1% %p2% %p3% %p4% %p5% %p6% %p7% %p8% %p9% 
 		}
-	If (p2 = 0 or p4 = 0 or p5 = 0) 
-		{
-		Sleep 5000
-		FFRK_ConfirmImage("fight_enter",imagevar,1)
-		}
+	;If (p2 = 0 or p4 = 0 or p5 = 0) 
+	;	{
+	;	Sleep 5000
+	;	FFRK_ConfirmImage("fight_enter",imagevar,1)
+	;	}
 	
 	FFRKchest := FFRK_ConfirmImage("treasure_wait",imagevar,0)  	
 	if (FFRKchest = 0)
@@ -180,21 +180,26 @@ FFRK_farming_process:
 	FFRK_ConfirmImage("fight_skip",imagevar,1)	
 	FFRK_ConfirmImage("fight_confirmend",imagevar,1)	
 	FFRK_ConfirmImage("fight_go",imagevar,1)	
-	FFRK_ConfirmImage("fight_enter",imagevar,1)	
-
-
+	FFRK_ConfirmImage("fight_enter",imagevar,1)
 
 	FFRK_ConfirmImage("core_ok_dungeon",imagevar,1)
 	FFRK_ConfirmImage("core_ok_stamina",imagevar,1)
 	FFRK_ConfirmImage("core_selectteam",imagevar,1)
 	FFRK_ConfirmImage("core_enterlaby",imagevar,1)
-	FFRK_ConfirmImage("core_missionconfirm",imagevar,1)		
-	dungeonreward := FFRK_ConfirmImage("core_dungeonreward",imagevar,0)	
-	If (redolaby = 1 and dungeonreward = 0)
+	;FFRK_ConfirmImage("core_missionconfirm",imagevar,1)
+
+	missionconfirmconflict := FFRK_ConfirmImage("core_missionconfirm",imagevar,0)
+	dungeonreward := FFRK_ConfirmImage("core_dungeonreward",imagevar,0)
+	fightconflict := FFRK_ConfirmImage("fight_enter",imagevar,0)
+	If (missionconfirmconflict = 0 and fightconflict != 0)
+		{
+		FFRK_ConfirmImage("core_missionconfirm",imagevar,1)
+		}
+	If (redolaby = 1 and dungeonreward = 0 and fightconflict != 0)
 		{
 		FFRK_ConfirmImage("core_dungeonreward",imagevar,1)	
 		}
-	If (redolaby = 0 and dungeonreward =0)
+	If (redolaby = 0 and dungeonreward = 0 and fightconflict != 0)
 		{
 		Loop, 2
 			{
