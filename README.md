@@ -16,6 +16,11 @@ as a reminder, **FFRK AndApp** version only exist for the **Japanese version** o
 
 ### Version
 
+**Beta 2**    
+
+Speed optimisation to reach Sanic Speed (not always but lot better).   
+Fixed multiple improper checks (all of them should be fixed now).  
+
 **Beta 1**    
 
 This version is a reworked and massively stripped version of my other (old) macro [FFRK macro Keeper](https://github.com/LosBaguettor/ffrkmacrokeeper).  
@@ -66,6 +71,7 @@ Name - effect
 
 **[and]** : Related to the Macro itself.  
 - **ffrkaggro** - Before doing any action, the macro will always re-enforce the focus on FFRK window, highly recommanded. Default = 1  
+- **seekspeed** - Delay for quick check after selecting a canvas, you may need to increase it a bit on a slow internet, value in msec. Default = 300  
 - **ffrkheight** - Difference between Outside and Inside Window, Default = 39  
 - **ffrkwidth** - Difference between Outside and Inside Window. Default = 16  
 
