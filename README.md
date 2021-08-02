@@ -1,4 +1,4 @@
-# FFRK Labyrinth macro keeper
+# FFRK Labyrinth Macro Keeper
 
 ### Introduction
 
@@ -12,9 +12,23 @@ This macro use image to work, if you have any permanent special settings activat
 
 as a reminder, **FFRK AndApp** version only exist for the **Japanese version** of the game.  
 
+With the addition of Quick Battle in Labyrinth, you **need** to set the confirmation to **OFF**.  
+
+here's the recommanded settings :  
+
+![Laby settings](https://cdn.discordapp.com/attachments/653310076794437633/871860079773753404/unknown.png)  
+
 ##
 
 ### Version
+
+**Beta 3**  
+
+Now works with Quick Battle.  
+Fixed a major mistake for restarting the same laby (it didn't work, i messed up the order in Beta 2...)  
+Added multiple checks for a few things, for some reason some check didn't work on some PC but i'm not sure why.   
+Known issue for all versions : in rare case ( 2 paitings line with Warp on Left , Treasure Room on Right), the macro will ignore the Treasure Room.  
+I'm not sure why this happen , it seems random.  
 
 **Beta 2**    
 

@@ -169,6 +169,7 @@ FFRK_farming_process:
 	
 	FFRK_chest:
 	FFRKchest := FFRK_ConfirmImage("treasure_wait",imagevar,0)  	
+	;msgbox %FFRKchest%
 	if (FFRKchest = 0)
 		{
 		if (rngesuschest >= 1)
@@ -228,33 +229,39 @@ FFRK_farming_process:
 	FFRK_fight:
 	FFRK_ConfirmImage("fight_skip",imagevar,1)	
 	FFRK_ConfirmImage("fight_confirmend",imagevar,1)	
+	FFRK_ConfirmImage("fight_quickgo",imagevar,1)	
 	FFRK_ConfirmImage("fight_go",imagevar,1)	
 	FFRK_ConfirmImage("fight_enter",imagevar,1)
 	FFRK_ConfirmImage("core_ok_dungeon",imagevar,1)
 	FFRK_ConfirmImage("core_ok_stamina",imagevar,1)
 	FFRK_ConfirmImage("core_selectteam",imagevar,1)
 	
+	missionclear := FFRK_ConfirmImage("core_missioncleared",imagevar,0)
+	If (missionclear = 0)
+		{
+		FFRK_ConfirmImage("core_missionconfirm",imagevar,1)
+		FFRK_ConfirmImage("core_dungeonreward",imagevar,1)
+		FFRK_ConfirmImage("core_dungeonreward2",imagevar,1)
+		goto, FFRK_farming_process
+		}
+	dungeonend := FFRK_ConfirmImage("core_dungeonend",imagevar,0)	
+	dungeonend2 := FFRK_ConfirmImage("core_dungeonend2",imagevar,0)	
+	;msgbox %dungeonend% %dungeonend2%
+	If (dungeonend = 0 or dungeonend2 = 0)
+		{
+		FFRK_ConfirmImage("core_missionconfirm",imagevar,1)
+		FFRK_ConfirmImage("core_dungeonreward",imagevar,1)
+		FFRK_ConfirmImage("core_dungeonreward2",imagevar,1)
+		SoundPlay, %FinalBoss_alert%, 1
+		goto, FFRK_farming_process
+		}	
+
 	FFRK_endboss:
 	If (redolaby = 1)
 		{
 		FFRK_ConfirmImage("core_enterlaby",imagevar,1)
 		goto, FFRK_farming_process
 		}
-	
-	missionclear := FFRK_ConfirmImage("core_missioncleared",imagevar,0)
-	If (missionclear = 0)
-		{
-		FFRK_ConfirmImage("core_missionconfirm",imagevar,1)
-		FFRK_ConfirmImage("core_dungeonreward",imagevar,1)
-		goto, FFRK_farming_process
-		}
-	dungeonend := FFRK_ConfirmImage("core_dungeonend",imagevar,0)	
-	If (dungeonend = 0)
-		{
-		FFRK_ConfirmImage("core_missionconfirm",imagevar,1)
-		FFRK_ConfirmImage("core_dungeonreward",imagevar,1)
-		goto, FFRK_farming_process
-		}	
 	
 	}
 
