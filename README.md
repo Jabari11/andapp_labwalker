@@ -22,6 +22,36 @@ here's the recommanded settings :
 
 ### Version
 
+** Jab 1**
+
+(Note: some of these are in progress...)
+
+Todo:
+- Add a hotkey to toggle starting new dungeon
+- Exit script on dungeon complete if not restarting
+- file renaming throughout
+
+BugFixes:
+- Last row with 2 paintings are a different size, added images and checks for these.
+
+Error handling added:
+- Should recover from "An Error Has Occured", and work its way back to the labyrinth from the title menu.
+- Added protection against latency on the last row Portal/FinalBoss
+
+Other changes:
+- Updated priority scheme (corridor > red, spring > green)
+- Renamed image files throughout
+- Added lots of comments
+- Added lots of logging
+- Pop-up windows on restart and exit
+
+Known Limitations:
+- Takes over your screen - you can't really do anything else on the machine, and moving the mouse will throw off the scripting.
+- Does not see shimmering paintings
+- Always selects group 1 for Enemy Upon You encounters (including Doors).
+  - Make sure your group 1 can handle max fatigue.
+  - It quick-starts on colored paintings, so can use "minimum" and 3 groups, or "group 1" and a MND group.
+
 **Beta 3**  
 
 Now works with Quick Battle.  
