@@ -18,21 +18,19 @@ global ffrkwidth
 global delaystart
 global iniurl := A_ScriptDir  "\include\ffrk_macro.ini"
 global logurl := A_ScriptDir  "\log\" A_YYYY "_" A_MM "_" A_DD ".txt"
-global emptyloop = 0
 global intromessage
-global debugfinalboss
 global SLP3
 
 
-IniRead, redolaby, %iniurl%, baguette, redolaby , 0
-IniRead, rngesuschest, %iniurl%, baguette, rngesuschest , 0
-IniRead, ffrkaggro, %iniurl%, and, ffrkaggro , 1
-IniRead, SLP3, %iniurl%, and, seekspeed , 300
-IniRead, ffrkheight, %iniurl%, and, ffrkheight , 39
-IniRead, ffrkwidth, %iniurl%, and, ffrkwidth , 16
-IniRead, delaystart, %iniurl%, knuckles, delaystart , 100
-IniRead, intromessage, %iniurl%, knuckles, intromessage , 1
-IniRead, debugfinalboss, %iniurl%, knuckles, debugfinalboss , 0
+IniRead, redolaby, %iniurl%, settings, redolaby , 0
+IniRead, rngesuschest, %iniurl%, settings, treasurecount , 1
+IniRead, treasurelast, %iniurl%, settings, treasurelast , 0
+IniRead, ffrkaggro, %iniurl%, settings, ffrkaggro , 1
+IniRead, SLP3, %iniurl%, settings, seekspeed , 300
+IniRead, ffrkheight, %iniurl%, settings, ffrkheight , 39
+IniRead, ffrkwidth, %iniurl%, settings, ffrkwidth , 16
+IniRead, delaystart, %iniurl%, settings, delaystart , 100
+IniRead, intromessage, %iniurl%, settings, intromessage , 1
 
 global ffrk_window_height := 498 + ffrkheight
 global ffrk_window_width := 280 + ffrkwidth
@@ -41,16 +39,10 @@ global ffrk_clic_height := ffrkheight - ffrk_clic_width
 global imagevar = 80 ; color variation
 global SLP1 = 100
 global SLP2 = 100
-global failoverreset = 2000
-global failovermodulo = 100
-global Chest_alert := A_WinDir	"\Media\Alarm07.wav"
-global FinalBoss_alert := A_WinDir	"\Media\Ring05.wav"
-global Calibration := A_WinDir	"\Media\tada.wav"
-
 
 If (intromessage = 1)
 	{
-	MsgBox, 48,FFRK Labyrinth Macro Keeper Beta 2 by LosBaguettor, Hello`nTo properly use this macro,`nPlease check the README !`n`nPress F1 to START the macro`nPress F2 to CLOSE the macro`nPress F3 to RELOAD the macro`n`nPress OK to continue`n`nHave fun farming !!
+	MsgBox, 48,FFRK Labyrinth Macro Keeper ver 1.0 by Jabari11 (forked from LosBaguettor), Hello`nTo properly use this macro,`nPlease check the README !`n`nPress F1 to START the macro`nPress F2 to CLOSE the macro`nPress F3 to RELOAD the macro`n`nPress OK to continue`n
 	}
 
 F2::
@@ -64,7 +56,6 @@ Reload
 
 F8::
 FFRK_state(1)
-SoundPlay, %Calibration%, 1
 Pause
 
 F1::
@@ -86,7 +77,7 @@ FFRK_farming_process:
 	;
 	; "lastrow" images are a slightly different size if there are only
 	; 2 paintings there (portal or final boss + 1 painting), so those need
-	; to be checked separately.
+	; to be image-captured and checked separately.
 	
 	FFRKblue := FFRK_ConfirmImage("check_blue",imagevar,0)  
 	FFRKpurple := FFRK_ConfirmImage("check_purple",imagevar,0) 
@@ -94,22 +85,24 @@ FFRK_farming_process:
 	
 	If ( FFRKblue = 0 or FFRKpurple = 0)
 		{
-		treasure := FFRK_ConfirmImage("painting_treasure",imagevar,3)
-		If ( treasure = 0 ) 
-			{
-			Sleep, %SLP3%
-			FileAppend , Selecting Treasure Room`n, %logurl%
-			goto, FFRK_chest
-			}
+        If (treasurelast = 0)
+		{		
+			treasure := FFRK_ConfirmImage("painting_treasure",imagevar,3)
+			If ( treasure = 0 ) 
+				{
+				Sleep, %SLP3%
+				FileAppend , Selecting Treasure Room`n, %logurl%
+				goto, FFRK_chest
+				}
 
-		treasure := FFRK_ConfirmImage("painting_treasure_2",imagevar,3)
-		If ( treasure = 0 ) 
-			{
-			Sleep, %SLP3%
-			FileAppend , Selecting Treasure Room - last row`n, %logurl%
-			goto, FFRK_chest
-			}
-						
+			treasure := FFRK_ConfirmImage("painting_treasure_2",imagevar,3)
+			If ( treasure = 0 ) 
+				{
+				Sleep, %SLP3%
+				FileAppend , Selecting Treasure Room - last row`n, %logurl%
+				goto, FFRK_chest
+				}
+		}				
 		corridor := FFRK_ConfirmImage("painting_corridor",imagevar,3)
 		If ( corridor = 0 ) 
 			{
@@ -143,80 +136,96 @@ FFRK_farming_process:
 			}
 
 
-		p3 := FFRK_ConfirmImage("p3",imagevar,3) ; orange painting (1)
-		If ( p3 = 0 ) 
+		combat_orange := FFRK_ConfirmImage("painting_orange",imagevar,3)
+		If ( combat_orange = 0 ) 
 			{
 			FileAppend , Selecting Orange Combat`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}
 
-		p4 := FFRK_ConfirmImage("p4",imagevar,3) ; orange painting (2)
-		If ( p4 = 0 ) 
+		combat_orange := FFRK_ConfirmImage("painting_orange_2",imagevar,3)
+		If ( combat_orange = 0 ) 
 			{
 			FileAppend , Selecting Orange Combat - last row`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}
 
-		p7 := FFRK_ConfirmImage("p7",imagevar,3) ; restore fatigue
-		If ( p7 = 0 ) 
+		spring := FFRK_ConfirmImage("painting_spring",imagevar,3)
+		If ( spring = 0 ) 
 			{
 			FileAppend , Selecting Spring`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_heal
 			}
 
-		p7_2 := FFRK_ConfirmImage("p7_2",imagevar,3) ; restore fatigue - last row with 2
-		If ( p7_2 = 0 ) 
+		spring := FFRK_ConfirmImage("painting_spring_2",imagevar,3)
+		If ( spring = 0 ) 
 			{
 			FileAppend , Selecting Spring - last row`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_heal
 			}
 
-		p5 := FFRK_ConfirmImage("p5",imagevar,3) ; green painting
-		If ( p5 = 0 ) 
+		combat_green := FFRK_ConfirmImage("painting_green",imagevar,3)
+		If ( combat_green = 0 ) 
 			{
 			FileAppend , Selecting Green Combat`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}
 
-		p6 := FFRK_ConfirmImage("p6",imagevar,3) ; buff
-		If ( p6 = 0 ) 
+		buff := FFRK_ConfirmImage("painting_statue",imagevar,3)
+		If ( buff = 0 ) 
 			{
 			FileAppend , Selecting Buff`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_buff
 			}
 
-		p8 := FFRK_ConfirmImage("p8",imagevar,3) ; portal
-		If ( p8 = 0 ) 
+		treasure := FFRK_ConfirmImage("painting_treasure",imagevar,3)
+		If ( treasure = 0 ) 
+			{
+			Sleep, %SLP3%
+			FileAppend , Selecting Treasure Room`n, %logurl%
+			goto, FFRK_chest
+			}
+
+		treasure := FFRK_ConfirmImage("painting_treasure_2",imagevar,3)
+		If ( treasure = 0 ) 
+			{
+			Sleep, %SLP3%
+			FileAppend , Selecting Treasure Room - last row`n, %logurl%
+			goto, FFRK_chest
+			}
+
+		portal := FFRK_ConfirmImage("painting_portal",imagevar,3)
+		If ( portal = 0 ) 
 			{
 			FileAppend , Selecting Portal`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}
 			
-		portal_selected := FFRK_ConfirmImage("painting_portal_large",imagevar,1) ; portal
-		If ( portal_selected = 0 ) 
+		portal := FFRK_ConfirmImage("painting_portal_large",imagevar,1) ; selected portal, just in case
+		If ( portal = 0 ) 
 			{
 			FileAppend , Selecting Portal`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}			
 
-		p9 := FFRK_ConfirmImage("p9",imagevar,3)
-		If ( p9 = 0 ) 
+		finalboss := FFRK_ConfirmImage("painting_finalboss",imagevar,3)
+		If ( finalboss = 0 ) 
 			{
 			FileAppend , Selecting Final Boss at %A_Hour%h %A_Min%min`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}
 		
-		p9_2 := FFRK_ConfirmImage("painting_finalboss_large",imagevar,3)
-		If ( p9_2 = 0 ) 
+		finalboss := FFRK_ConfirmImage("painting_finalboss_large",imagevar,3)
+		If ( finalboss = 0 ) 
 			{
 			FileAppend , Selecting Final Boss at %A_Hour%h %A_Min%min`n , %logurl%
 			Sleep, %SLP3%
@@ -239,59 +248,77 @@ FFRK_farming_process:
 	;msgbox %FFRKchest%
 	if (FFRKchest = 0)
 		{
-		if (rngesuschest >= 1)
+		Loop, 8
 			{
-			Loop, 10
+			Sleep 100
+			varleft := FFRK_ConfirmImage("chest_rngesus_left",imagevar,1)
+			if (rngesuschest >= 2 and varleft != 0)
 				{
 				Sleep 100
-				varleft := FFRK_ConfirmImage("chest_rngesus_left",imagevar,1)
-				if (rngesuschest >= 2 and varleft != 0)
+				varmid := FFRK_ConfirmImage("chest_rngesus_mid",imagevar,1)	
+				if (rngesuschest >= 3 and varmid != 0)
 					{
-					Sleep 100
-					varmid := FFRK_ConfirmImage("chest_rngesus_mid",imagevar,1)	
-					if (rngesuschest >= 3 and varmid != 0)
-						{
-						Sleep 100						
-						varright := FFRK_ConfirmImage("chest_rngesus_right",imagevar,1)
-						}
-					}
-				Sleep 100
-				varconfirm := FFRK_ConfirmImage("chest_rngesus_confirm",imagevar,1)		
-				if (varconfirm = 0)
-					{
-					FileAppend , Auto opening chest`n , %logurl%
-					}
-				Sleep 100
-				varkey := FFRK_ConfirmImage("chest_keycheck",imagevar,1)
-				varnokey := FFRK_ConfirmImage("chest_keycheck_nokey",imagevar,0)
-				if (varkey != 0 and varnokey = 0)
-					{
-					FFRK_ConfirmImage("chest_keycheck_nokey",imagevar,1)
+					Sleep 100						
+					varright := FFRK_ConfirmImage("chest_rngesus_right",imagevar,1)
 					}
 				}
-			FFRK_ConfirmImage("corridor_confirmreward",imagevar,1)		
-			}			
-		else
-			{
-			Loop, 3
+			Sleep 100
+			varconfirm := FFRK_ConfirmImage("chest_rngesus_confirm",imagevar,1)		
+			if (varconfirm = 0)
 				{
-				SoundPlay, %Chest_alert%, 1
-				Sleep 2000
+				FileAppend , Auto opening chest`n , %logurl%
 				}
-			}
-		goto, FFRK_farming_process
+			Sleep 100
+			varkey := FFRK_ConfirmImage("chest_keycheck",imagevar,1)
+			varnokey := FFRK_ConfirmImage("chest_keycheck_nokey",imagevar,0)
+			if (varkey != 0 and varnokey = 0)
+				{
+				FFRK_ConfirmImage("chest_keycheck_nokey",imagevar,1)
+				}
+			} ; end loop (checking chests to open)
+		FFRK_ConfirmImage("corridor_confirmreward",imagevar,1)
+		Sleep 800
+
 		} ; end if (processing treasure room)
 
+	FFRK_ConfirmImage("button_ok_unopened_chest",imagevar,1)
 	; Attempt to handle error screens and reload from title
 	error1 := FFRK_ConfirmImage("an_error_has_occured",imagevar,0)
 	if (error1 = 0)
 		{
 			FileAppend , ERROR OCCURED`n, %logurl%		
 		}
-	
+	error2 := FFRK_ConfirmImage("an_error_has_occured_2",imagevar,0)
+	if (error2 = 0)
+		{
+			FileAppend , ERROR OCCURED 2`n, %logurl%		
+		}
+	error3 := FFRK_ConfirmImage("an_error_has_occured_3",imagevar,0)
+	if (error3 = 0)
+		{
+			FileAppend , ERROR CONNECTION`n, %logurl%
+		}
+
 	FFRK_ConfirmImage("button_generic_ok",imagevar,1)
+	FFRK_ConfirmImage("button_error_retry",imagevar,1)
+	FFRK_ConfirmImage("button_error_gotop",imagevar,1)
+	FFRK_ConfirmImage("button_ok_retry_connection",imagevar,1)
 	FFRK_ConfirmImage("button_title_start",imagevar,1)
+	FFRK_ConfirmImage("button_brown_ok",imagevar,1) ; brown "ok" button for friend greens on day change
+	FFRK_ConfirmImage("button_new_missions",imagevar,1)
 	FFRK_ConfirmImage("icon_labyrinth_entrance",imagevar,1)
+	FFRK_ConfirmImage("icon_labyrinth_entrance2",imagevar,1)
+	FFRK_ConfirmImage("icon_labyrinth_fresh",imagevar,1)
+	
+	; dead, restart
+	dead := FFRK_ConfirmImage("screen_dead",imagevar,0)
+	if (dead = 0)
+	    {
+		FileAppend , WIPED - restarting`n, %logurl%
+		}
+	
+	FFRK_ConfirmImage("button_dead_restart",imagevar,1)
+	FFRK_ConfirmImage("button_restart_battle",imagevar,1)
 	
 	FFRK_heal:
 	FFRK_ConfirmImage("heal_confirm",imagevar,1)	
@@ -322,7 +349,7 @@ FFRK_farming_process:
 		}
 	dungeonend := FFRK_ConfirmImage("core_dungeonend",imagevar,0)	
 	dungeonend2 := FFRK_ConfirmImage("core_dungeonend2",imagevar,0)	
-	;msgbox %dungeonend% %dungeonend2%
+
 	If (dungeonend = 0 or dungeonend2 = 0)
 		{
 		FFRK_ConfirmImage("core_missionconfirm",imagevar,1)
@@ -331,7 +358,6 @@ FFRK_farming_process:
 		goto, FFRK_farming_process
 		}	
 
-	FFRK_endboss:
 	If (redolaby = 1)
 		{
 		FFRK_ConfirmImage("core_enterlaby",imagevar,1)
