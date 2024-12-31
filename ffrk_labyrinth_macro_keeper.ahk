@@ -25,6 +25,7 @@ global SLP3
 IniRead, redolaby, %iniurl%, settings, redolaby , 0
 IniRead, rngesuschest, %iniurl%, settings, treasurecount , 1
 IniRead, treasurelast, %iniurl%, settings, treasurelast , 0
+IniRead, doorlast, %iniurl%, settings, doorlast , 0
 IniRead, ffrkaggro, %iniurl%, settings, ffrkaggro , 1
 IniRead, SLP3, %iniurl%, settings, seekspeed , 300
 IniRead, ffrkheight, %iniurl%, settings, ffrkheight , 39
@@ -85,8 +86,9 @@ FFRK_farming_process:
 	
 	If ( FFRKblue = 0 or FFRKpurple = 0)
 		{
+		; Treasure rooms don't disappear if skipped - this is if people want first.
         If (treasurelast = 0)
-		{		
+			{		
 			treasure := FFRK_ConfirmImage("painting_treasure",imagevar,3)
 			If ( treasure = 0 ) 
 				{
@@ -102,23 +104,28 @@ FFRK_farming_process:
 				FileAppend , Selecting Treasure Room - last row`n, %logurl%
 				goto, FFRK_chest
 				}
-		}				
-		corridor := FFRK_ConfirmImage("painting_corridor",imagevar,3)
-		If ( corridor = 0 ) 
-			{
-			Sleep, %SLP3%
-			FileAppend , Selecting Corridor`n , %logurl%
-			goto, FFRK_corridor
-			}
-
-		corridor := FFRK_ConfirmImage("painting_corridor_2",imagevar,3)
-		If ( corridor = 0 ) 
-			{
-			Sleep, %SLP3%
-			FileAppend , Selecting Corridor - last row`n , %logurl%
-			goto, FFRK_corridor
 			}
 			
+		; New theory - combat paintings > doors for getting more treasure rooms later
+		; on the floor.
+		If ( doorlast = 0)
+		{
+			corridor := FFRK_ConfirmImage("painting_corridor",imagevar,3)
+			If ( corridor = 0 ) 
+				{
+				Sleep, %SLP3%
+				FileAppend , Selecting Corridor`n , %logurl%
+				goto, FFRK_corridor
+				}
+
+			corridor := FFRK_ConfirmImage("painting_corridor_2",imagevar,3)
+			If ( corridor = 0 ) 
+				{
+				Sleep, %SLP3%
+				FileAppend , Selecting Corridor - last row`n , %logurl%
+				goto, FFRK_corridor
+			}
+		}  ; end doors first corridor check	
 		combat_red := FFRK_ConfirmImage("painting_red",imagevar,3)
 		If ( combat_red = 0 ) 
 			{
@@ -134,7 +141,6 @@ FFRK_farming_process:
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}
-
 
 		combat_orange := FFRK_ConfirmImage("painting_orange",imagevar,3)
 		If ( combat_orange = 0 ) 
@@ -152,6 +158,31 @@ FFRK_farming_process:
 			goto, FFRK_fight
 			}
 
+		combat_green := FFRK_ConfirmImage("painting_green",imagevar,3)
+		If ( combat_green = 0 ) 
+			{
+			FileAppend , Selecting Green Combat`n , %logurl%
+			Sleep, %SLP3%
+			goto, FFRK_fight
+			}
+
+		; Re-check corridors and treasure rooms in case they were skipped on the first pass.
+		corridor := FFRK_ConfirmImage("painting_corridor",imagevar,3)
+		If ( corridor = 0 ) 
+			{
+			Sleep, %SLP3%
+			FileAppend , Selecting Corridor`n , %logurl%
+			goto, FFRK_corridor
+			}
+
+		corridor := FFRK_ConfirmImage("painting_corridor_2",imagevar,3)
+		If ( corridor = 0 ) 
+			{
+			Sleep, %SLP3%
+			FileAppend , Selecting Corridor - last row`n , %logurl%
+			goto, FFRK_corridor
+		}
+		
 		spring := FFRK_ConfirmImage("painting_spring",imagevar,3)
 		If ( spring = 0 ) 
 			{
@@ -167,22 +198,14 @@ FFRK_farming_process:
 			Sleep, %SLP3%
 			goto, FFRK_heal
 			}
-
-		combat_green := FFRK_ConfirmImage("painting_green",imagevar,3)
-		If ( combat_green = 0 ) 
-			{
-			FileAppend , Selecting Green Combat`n , %logurl%
-			Sleep, %SLP3%
-			goto, FFRK_fight
-			}
-
+			
 		buff := FFRK_ConfirmImage("painting_statue",imagevar,3)
 		If ( buff = 0 ) 
 			{
 			FileAppend , Selecting Buff`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_buff
-			}
+			}			
 
 		treasure := FFRK_ConfirmImage("painting_treasure",imagevar,3)
 		If ( treasure = 0 ) 
@@ -203,7 +226,7 @@ FFRK_farming_process:
 		portal := FFRK_ConfirmImage("painting_portal",imagevar,3)
 		If ( portal = 0 ) 
 			{
-			FileAppend , Selecting Portal`n , %logurl%
+			FileAppend , SELECTING PORTAL`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}
@@ -211,7 +234,7 @@ FFRK_farming_process:
 		portal := FFRK_ConfirmImage("painting_portal_large",imagevar,1) ; selected portal, just in case
 		If ( portal = 0 ) 
 			{
-			FileAppend , Selecting Portal`n , %logurl%
+			FileAppend , SELECTING PORTAL`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}			
@@ -219,7 +242,7 @@ FFRK_farming_process:
 		finalboss := FFRK_ConfirmImage("painting_finalboss",imagevar,3)
 		If ( finalboss = 0 ) 
 			{
-			FileAppend , Selecting Final Boss at %A_Hour%h %A_Min%min`n , %logurl%
+			FileAppend , SELECTING FINAL BOSS at %A_Hour%h %A_Min%min`n , %logurl%
 			Sleep, %SLP3%
 			goto, FFRK_fight
 			}

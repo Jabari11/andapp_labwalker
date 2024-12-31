@@ -12,6 +12,7 @@ Error handling added:
 
 Other changes:
 - Updated priority scheme (corridor > red, spring > green)
+- Added two new config options for ordering (treasure last, door last) - setting both to 1 gets the most stuff per stamina, but is slower.
 - Added lots of comments
 - Added lots of logging
 - Pop-up windows on restart and exit
